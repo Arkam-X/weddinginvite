@@ -12,6 +12,7 @@
   const gardenBackground = $("#gardenBackground");
   const prompt = $("#scrollPrompt");
   const audio = $("#ambience");
+  const locationLink = $("#locationLink");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   if (!gate || !openButton || !experience || !track || !card) return;
@@ -22,6 +23,10 @@
   let lenis = null;
   let musicStarted = false;
   let gestureArmed = false;
+  let gestureHandler = null;
+  let musicSuppressed = false;
+
+  const gestureEvents = ["pointerdown", "keydown", "touchstart", "wheel"];
 
   const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
   const setText = (selector, value) => {
@@ -40,9 +45,7 @@
     setText("#venueName", CONFIG.venueName || "Gazeebo Hall");
     setText("#venueAddress", CONFIG.venueAddress || "Goawala Compound, Opposite Sahara Hotel, Kurla, Mumbai");
 
-    const locationLink = $("#locationLink");
     if (locationLink && CONFIG.mapUrl) locationLink.href = CONFIG.mapUrl;
-
     if (CONFIG.audioSrc && String(CONFIG.audioSrc).trim()) {
       audio.src = String(CONFIG.audioSrc).trim();
     }
@@ -101,6 +104,7 @@
   }
 
   function playMusic() {
+    if (musicSuppressed) return;
     if (!audio || !CONFIG.audioSrc || !String(CONFIG.audioSrc).trim()) return;
     if (musicStarted) return;
     musicStarted = true;
@@ -124,16 +128,30 @@
   }
 
   function armGestureAutoplay() {
-    if (gestureArmed || musicStarted) return;
+    if (gestureArmed || musicStarted || musicSuppressed) return;
     if (!audio || !CONFIG.audioSrc || !String(CONFIG.audioSrc).trim()) return;
     gestureArmed = true;
-    const events = ["pointerdown", "keydown", "touchstart", "wheel"];
-    const onGesture = () => {
-      gestureArmed = false;
-      events.forEach(eventName => window.removeEventListener(eventName, onGesture));
+    gestureHandler = () => {
+      disarmGestureAutoplay();
       playMusic();
     };
-    events.forEach(eventName => window.addEventListener(eventName, onGesture, { passive: true }));
+    gestureEvents.forEach(eventName => window.addEventListener(eventName, gestureHandler, { passive: true }));
+  }
+
+  function disarmGestureAutoplay() {
+    if (!gestureHandler) return;
+    gestureEvents.forEach(eventName => window.removeEventListener(eventName, gestureHandler));
+    gestureHandler = null;
+    gestureArmed = false;
+  }
+
+  function bindLocationMusicStop() {
+    if (!locationLink || !audio) return;
+    locationLink.addEventListener("click", () => {
+      musicSuppressed = true;
+      disarmGestureAutoplay();
+      audio.pause();
+    });
   }
 
   function setCardProgress(progress) {
@@ -243,6 +261,7 @@
     });
   }
   countdownTimer = window.setInterval(updateCountdown, 1000);
+  bindLocationMusicStop();
   openButton.addEventListener("click", openInvitation, { once: true });
 
   window.addEventListener("pagehide", () => {
