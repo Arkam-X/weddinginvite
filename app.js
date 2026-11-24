@@ -12,7 +12,6 @@
   const gardenBackground = $("#gardenBackground");
   const prompt = $("#scrollPrompt");
   const audio = $("#ambience");
-  const soundToggle = $("#soundToggle");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   if (!gate || !openButton || !experience || !track || !card) return;
@@ -21,6 +20,8 @@
   let countdownTimer = null;
   let nativeScrollHandler = null;
   let lenis = null;
+  let musicStarted = false;
+  let gestureArmed = false;
 
   const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
   const setText = (selector, value) => {
@@ -44,10 +45,6 @@
 
     if (CONFIG.audioSrc && String(CONFIG.audioSrc).trim()) {
       audio.src = String(CONFIG.audioSrc).trim();
-      soundToggle.hidden = false;
-      soundToggle.setAttribute("aria-label", "Turn invitation music on");
-    } else {
-      soundToggle.hidden = true;
     }
   }
 
@@ -82,7 +79,7 @@
     ];
 
     const fragment = document.createDocumentFragment();
-    for (let index = 0; index < 12; index += 1) {
+    for (let index = 0; index < 30; index += 1) {
       const petal = document.createElement("img");
       const size = randomBetween(17, 29);
       const duration = randomBetween(15, 25);
@@ -103,15 +100,15 @@
     petalLayer.appendChild(fragment);
   }
 
-  function startMusicFromGesture() {
+  function playMusic() {
     if (!audio || !CONFIG.audioSrc || !String(CONFIG.audioSrc).trim()) return;
+    if (musicStarted) return;
+    musicStarted = true;
     audio.volume = 0;
     audio.muted = false;
     const playback = audio.play();
     if (!playback || typeof playback.then !== "function") return;
     playback.then(() => {
-      soundToggle.textContent = "Mute";
-      soundToggle.setAttribute("aria-pressed", "true");
       const startedAt = performance.now();
       const fade = now => {
         if (audio.paused || audio.muted) return;
@@ -121,29 +118,22 @@
       };
       requestAnimationFrame(fade);
     }).catch(() => {
-      soundToggle.textContent = "Sound off";
-      soundToggle.setAttribute("aria-pressed", "false");
+      musicStarted = false;
+      armGestureAutoplay();
     });
   }
 
-  function bindSoundToggle() {
-    soundToggle.addEventListener("click", () => {
-      if (!CONFIG.audioSrc || !String(CONFIG.audioSrc).trim()) return;
-      if (audio.paused) {
-        audio.muted = false;
-        audio.play().then(() => {
-          soundToggle.textContent = "Mute";
-          soundToggle.setAttribute("aria-pressed", "true");
-        }).catch(() => {
-          soundToggle.textContent = "Sound off";
-          soundToggle.setAttribute("aria-pressed", "false");
-        });
-        return;
-      }
-      audio.muted = !audio.muted;
-      soundToggle.textContent = audio.muted ? "Sound on" : "Mute";
-      soundToggle.setAttribute("aria-pressed", String(!audio.muted));
-    });
+  function armGestureAutoplay() {
+    if (gestureArmed || musicStarted) return;
+    if (!audio || !CONFIG.audioSrc || !String(CONFIG.audioSrc).trim()) return;
+    gestureArmed = true;
+    const events = ["pointerdown", "keydown", "touchstart", "wheel"];
+    const onGesture = () => {
+      gestureArmed = false;
+      events.forEach(eventName => window.removeEventListener(eventName, onGesture));
+      playMusic();
+    };
+    events.forEach(eventName => window.addEventListener(eventName, onGesture, { passive: true }));
   }
 
   function setCardProgress(progress) {
@@ -231,7 +221,7 @@
   function openInvitation() {
     if (opened) return;
     opened = true;
-    startMusicFromGesture();
+    playMusic();
     applyGardenMotionPreference();
     experience.hidden = false;
     document.body.classList.remove("is-locked");
@@ -246,13 +236,13 @@
 
   applyConfiguration();
   updateCountdown();
+  playMusic();
   if (typeof reducedMotion.addEventListener === "function") {
     reducedMotion.addEventListener("change", () => {
       if (opened) applyGardenMotionPreference();
     });
   }
   countdownTimer = window.setInterval(updateCountdown, 1000);
-  bindSoundToggle();
   openButton.addEventListener("click", openInvitation, { once: true });
 
   window.addEventListener("pagehide", () => {

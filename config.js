@@ -11,5 +11,5 @@ window.INVITATION_CONFIG = Object.freeze({
   venueAddress: "Goawala Compound, Opposite Sahara Hotel, Kurla, Mumbai",
   mapUrl: "https://www.google.com/maps/search/?api=1&query=Gazeebo+Hall+Goawala+Compound+Kurla+Mumbai",
   // Optional: add a licensed instrumental MP3 file here. Leave empty for no music.
-  audioSrc: ""
+  audioSrc: "assets/audio/la-la-tahsab.mp3"
 });

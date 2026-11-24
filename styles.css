@@ -274,22 +274,6 @@ button { font: inherit; }
 .closing-dua { max-width: 300px; margin: 0 auto; color: var(--emerald); font: italic 15px/1.15 "Cormorant Garamond", serif; }
 .closing-ameen { display: block; margin-top: 3px; color: var(--deep-gold); font: 400 8px/1.2 "Cormorant SC", serif; letter-spacing: .2em; text-transform: uppercase; }
 
-.sound-toggle {
-  position: absolute;
-  z-index: 20;
-  top: max(17px, env(safe-area-inset-top));
-  right: 17px;
-  min-width: 44px;
-  min-height: 44px;
-  border: 1px solid rgba(233,217,181,.6);
-  background: rgba(10,42,46,.34);
-  color: var(--ivory);
-  font: 400 9px "Cormorant SC", serif;
-  letter-spacing: .12em;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-}
-
 @media (min-width: 900px) {
   .garden-background { object-position: center 51%; }
   .invitation-card { width: min(37vw, 455px); }
