@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A2A2E">
+  <meta name="description" content="The wedding invitation of Shifa Chaudhary and Asif Khan — Thursday, 10 December 2026, Mumbai.">
+  <title>Shifa Chaudhary&amp; Asif Khan — Wedding Invitation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/images/garden-hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="config.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="is-locked">
+  <a class="skip-link" href="#invitationCard">Skip to invitation</a>
+
+  <!-- The opening gate is typography on ivory paper; it is not a second photo scene. -->
+  <section class="gate" id="gate" aria-labelledby="gateTitle">
+    <div class="gate-frame" aria-hidden="true"></div>
+    <div class="gate-inner">
+      <p class="gate-kicker">A wedding invitation</p>
+      <p class="bismillah" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+      <span class="gold-rule" aria-hidden="true"></span>
+      <h1 class="gate-names" id="gateTitle">
+        <span id="gateBride">Shifa Chaudhary</span>
+        <span class="gate-ampersand" aria-hidden="true">&amp;</span>
+        <span id="gateGroom">Asif Khan</span>
+      </h1>
+      <p class="gate-subtitle">Together with their families</p>
+      <button class="hairline-button" id="openInvitation" type="button">Open Invitation</button>
+      <p class="gate-date" id="gateDate">Thursday · 10 December 2026</p>
+    </div>
+    <p class="gate-footnote">With gratitude and the blessings of Allah</p>
+  </section>
+
+  <!-- ONE photographic scene only. The invitation eases in over this same image. -->
+  <main id="invitationExperience" class="experience" hidden>
+    <div class="scroll-track" id="scrollTrack">
+      <section class="stage" id="stage" aria-label="Wedding invitation in a Mughal garden">
+        <img
+          class="garden-background"
+          id="gardenBackground"
+          src="assets/images/garden-hero.webp"
+          data-static-src="assets/images/garden-hero.webp"
+          data-breeze-src="assets/images/garden-hero-breeze.webp"
+          alt="A terracotta path beneath a carved sandstone Mughal arch, leading through a flower-filled garden towards a distant domed palace"
+          fetchpriority="high"
+          decoding="async"
+        >
+        <div class="garden-shade" aria-hidden="true"></div>
+
+        <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
+
+        <div class="scroll-prompt" id="scrollPrompt" aria-hidden="true">
+          <span class="scroll-prompt-line"></span>
+          <span>Scroll gently to reveal the invitation</span>
+        </div>
+
+        <div class="invitation-wrap">
+          <article class="invitation-card" id="invitationCard" aria-labelledby="cardGroom cardBride">
+            <div class="card-keyline" aria-hidden="true"></div>
+            <div class="card-content">
+              <p class="card-bismillah" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+              <p class="card-blessing">With the blessings of Allah,<br>together with their families</p>
+
+              <h2 class="name-line name-line--bride" id="cardBride">Asif Khan</h2>
+              <p class="name-join" aria-hidden="true">&amp;</p>
+              <h2 class="name-line" id="cardGroom">Shifa Chaudhary</h2>
+
+              <span class="foil-rule" aria-hidden="true"></span>
+              <p class="date-line" id="eventDateLabel">Thursday · 10 December 2026</p>
+              <p class="time-line" id="eventTimeLabel">After Maghrib</p>
+
+              <p class="venue-name" id="venueName">Gazeebo Hall</p>
+              <p class="venue-address" id="venueAddress">Goawala Compound, Opposite Sahara Hotel, Kurla, Mumbai</p>
+
+              <p class="countdown-label" id="countdownLabel">Countdown to the wedding date</p>
+              <div class="countdown" role="timer" aria-live="off" aria-label="Countdown to 10 December 2026">
+                <div class="countdown-item"><span class="countdown-value" id="countDays">—</span><span class="countdown-unit">Days</span></div>
+                <div class="countdown-item"><span class="countdown-value" id="countHours">—</span><span class="countdown-unit">Hours</span></div>
+                <div class="countdown-item"><span class="countdown-value" id="countMinutes">—</span><span class="countdown-unit">Minutes</span></div>
+                <div class="countdown-item"><span class="countdown-value" id="countSeconds">—</span><span class="countdown-unit">Seconds</span></div>
+              </div>
+
+              <a
+                class="location-link"
+                id="locationLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.google.com/maps/search/?api=1&amp;query=Gazeebo+Hall+Goawala+Compound+Kurla+Mumbai"
+              >View Location</a>
+
+              <p class="closing-dua">May Allah bless their union with love, mercy and lasting barakah.<span class="closing-ameen">Ameen</span></p>
+            </div>
+          </article>
+        </div>
+
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" hidden>Mute</button>
+      </section>
+    </div>
+  </main>
+
+  <audio id="ambience" preload="none" loop></audio>
+</body>
+</html>
